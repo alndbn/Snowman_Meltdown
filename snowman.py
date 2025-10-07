@@ -17,7 +17,7 @@ def play_game():
     # TODO: Build your game loop here.
     # For now, simply prompt the user once:
     guess = input("Guess a letter: ").lower()
-    print("You guessed:", guess)
+    print("You guessed: ", guess)
 
 
 if __name__ == "__main__":
