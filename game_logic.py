@@ -1,6 +1,8 @@
 import random
 from ascii_art import STAGES
 from word_list import WORDS
+from valid_letters import LETTERS
+from valid_letters import NUMBERS
 
 
 def get_random_word():
@@ -9,52 +11,65 @@ def get_random_word():
 
 
 def display_game_state(mistakes, secret_word, guessed_letters):
-    """Shows ASCII-Phase"""
+
     print(STAGES[mistakes])
+    if mistakes == 1:
+        print(f"You've made one mistake so far")
+    else:
+        print(f"You've made {NUMBERS[mistakes]} mistakes so far")
+    letters = ""
+    for char in secret_word:
+        if char in guessed_letters:
+            letters += char
+        else:
+            letters += "_"
+    print(f"Your current progress:{letters.upper()}")
 
-
-    display_word = ""
-    for letter in secret_word:
-        display_word += (letter + " ") if letter in guessed_letters else "_ "
-    print("Word:", display_word)
-    print()
 
 
 def is_word_revealed(secret_word, guessed_letters):
-    """returns True, if guessed_letters contains all letters from secret_word"""
-    return all(letter in guessed_letters for letter in secret_word)
+    found_letters = 0
+    for char in secret_word:
+        if char in guessed_letters:
+            found_letters += 1
+    return found_letters == len(secret_word)
+
+
 
 
 def play_game():
-    """conns the game play with input, hits/mistake, win/loose message"""
-    secret_word = get_random_word() #Ich initialisiere die Variable mit dem Namen secret_word auf den Rückgabewert der Funktion mit dem Namen get_random_word
     print("Welcome to Snowman Meltdown!")
-    #print("Secret word selected: " + secret_word)  # for testing, later remove this line
 
+    secret_word = get_random_word() #Ich initialisiere die Variable mit dem Namen secret_word auf den Rückgabewert der Funktion mit dem Namen get_random_word
     guessed_letters = []
     mistakes = 0
 
-    # Phase 0 + Unterstriche anzeigen
     display_game_state(mistakes, secret_word, guessed_letters)
 
-
     while not is_word_revealed(secret_word, guessed_letters) and mistakes < len(STAGES) -1:
-        guess = input("Guess a letter: ").lower().strip()
-
-        if len(guess) != 1 or not guess.isalpha():
-            print("Please enter a single letter (a-z).")
-            continue
-        if guess in guessed_letters:
-            print("You already guessed that letter.")
-            continue
-
-        if guess in secret_word:
+        valid_input = True
+        # nach ersten Buchstaben fragen und merken
+        guess = input("Guess a letter: ")
+        #Usereingabe von whitespaces befreien
+        guess = guess.strip()
+        #Usereingabe Buchstabe in Kleinbuchstaben umwandeln .lower()
+        guess = guess.lower()
+        #zähle die Buchstaben
+        length_of_input = len(guess)
+        #wenn das mehr als ein Buchstabe ist, Fehlermeldung
+        if length_of_input > 1 or length_of_input < 1:
+            valid_input = False
+            print("Only exactly one letter allowed. Try again.")
+        #wenn Sonderzeichen, Fehlermeldung
+        if valid_input and not guess in LETTERS:
+            valid_input = False
+            print("Only latin characters allowed. Try again.")
+        #überprüfen ob Buchstabe in secret_word ist
+        if valid_input and guess in secret_word:
             guessed_letters.append(guess)
-            print("Correct!")
-        else:
-            mistakes += 1
-            print("Wrong guess")
-
+        elif valid_input:
+            mistakes = mistakes + 1
+        #wenn ja, merken das Buchstabe in secret_word ist, wenn nein, merken das Fehler bei stages
         display_game_state(mistakes, secret_word, guessed_letters)
 
     if is_word_revealed(secret_word, guessed_letters):
@@ -64,5 +79,6 @@ def play_game():
         print("The snowman melted.")
         print(f"The word was: {secret_word}")
 
-
-
+    print("Do you want to play again?")
+    if input("Y/N ").upper() == "Y":
+        play_game()

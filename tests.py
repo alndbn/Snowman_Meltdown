@@ -1,0 +1,10 @@
+def test():
+    result1 = is_word_revealed("alena",["a","l","n"])
+    result2 = is_word_revealed("alena", ["a", "l","e", "n"])
+    result3 = is_word_revealed("alena", ["a", "l", "e", "n","a"])
+    result4 = is_word_revealed("alena", ["l", "e", "n","a"])
+    print(f"Test 1 returned: {result1}, expected False")
+    print(f"Test 2 returned: {result2}, expected True")
+    print(f"Test 3 returned: {result3}, expected True")
+    print(f"Test 4 returned: {result4}, expected True")
+    display_game_state(2, "alena", ["a","l"])
