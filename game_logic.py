@@ -11,7 +11,7 @@ def get_random_word():
 
 
 def display_game_state(mistakes, secret_word, guessed_letters):
-
+    """displaying the current game state for the user, including number of mistakes, a hint at the word and a snowman graphic"""
     print(STAGES[mistakes])
     if mistakes == 1:
         print(f"You've made one mistake so far")
@@ -28,6 +28,7 @@ def display_game_state(mistakes, secret_word, guessed_letters):
 
 
 def is_word_revealed(secret_word, guessed_letters):
+    """checking if all characters in a word are contained in a list of characters"""
     found_letters = 0
     for char in secret_word:
         if char in guessed_letters:
@@ -38,6 +39,7 @@ def is_word_revealed(secret_word, guessed_letters):
 
 
 def play_game():
+    """main game loop"""
     print("Welcome to Snowman Meltdown!")
 
     secret_word = get_random_word() #Ich initialisiere die Variable mit dem Namen secret_word auf den Rückgabewert der Funktion mit dem Namen get_random_word
